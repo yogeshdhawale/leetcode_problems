@@ -1,0 +1,255 @@
+/*
+
+4. Median of Two Sorted Arrays
+Hard
+
+20937
+
+2367
+
+Add to List
+
+Share
+Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
+
+The overall run time complexity should be O(log (m+n)).
+
+
+
+Example 1:
+
+Input: nums1 = [1,3], nums2 = [2]
+Output: 2.00000
+Explanation: merged array = [1,2,3] and median is 2.
+Example 2:
+
+Input: nums1 = [1,2], nums2 = [3,4]
+Output: 2.50000
+Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+
+
+Constraints:
+
+nums1.length == m
+nums2.length == n
+0 <= m <= 1000
+0 <= n <= 1000
+1 <= m + n <= 2000
+-106 <= nums1[i], nums2[i] <= 106
+
+*/
+
+package median2
+
+import (
+	"fmt"
+	"math"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+const LOG = 1
+
+type arrayInfo struct {
+	start int
+	end   int
+	mid   int
+	len   int
+	nums  *[]int
+}
+
+func (a arrayInfo) getEle(idx int) (int, bool) {
+	if idx < 0 || idx >= a.len {
+		return math.MaxInt, false
+	}
+	return (*a.nums)[idx], true
+}
+
+func printArrayInfo(a arrayInfo) {
+	if LOG == 1 {
+		fmt.Printf("Array(%v):[ %v, %v, %v]\n", a.len, a.start, a.mid, a.end)
+	}
+}
+
+func findMedian(nums []int, startidx int, endidx int) float64 {
+
+	len := endidx - startidx + 1
+	mid := startidx + ((endidx - startidx) / 2)
+	isodd := (len % 2) != 0
+	if LOG == 1 {
+		fmt.Printf("Single Array(%v):[ %v, %v, %v]\n", len, startidx, mid, endidx)
+	}
+
+	if len == 0 {
+		return 0
+	} else if len == 1 {
+		return float64(nums[startidx])
+	}
+
+	if isodd {
+		return float64(nums[mid])
+	} else {
+		return float64(nums[mid]+nums[mid+1]) / 2
+	}
+}
+
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+
+	if len(nums1) > len(nums2) {
+		return findMedianSortedArrays(nums2, nums1)
+	}
+
+	len1 := len(nums1)
+	len2 := len(nums2)
+
+	if len1 == 0 {
+		return findMedian(nums2, 0, len2-1)
+	}
+	if len2 == 0 {
+		return findMedian(nums1, 0, len1-1)
+	}
+
+	partEles := ((len1 + len2 + 1) / 2) // we want major partition as 1st part, hence adding 1
+	partId := partEles - 2              // compensating for index start from 0
+	isodd := ((len1 + len2) % 2) != 0
+	mid := (len1 - 1) / 2 //  mid2 is partEles - (mid + 1) - 1
+
+	xarry := arrayInfo{0, len1 - 1, mid, len1, &nums1}
+	yarry := arrayInfo{0, len2 - 1, partId - mid, len2, &nums2}
+
+	if LOG == 1 {
+		fmt.Printf("Total Elements: %v, xy(%v, %v)\n", len1+len2, len1, len2)
+		fmt.Printf("Mid is: %v, %v\n", xarry.mid, yarry.mid)
+	}
+	cnt := 0
+	for cnt < 30 {
+		cnt++
+		if LOG == 1 {
+			fmt.Printf("Looping %v ...\n", cnt)
+			printArrayInfo(xarry)
+			printArrayInfo(yarry)
+		}
+
+		if yarry.mid < 0 {
+			yarry.mid = 0
+		}
+
+		ele11, ok1 := xarry.getEle(xarry.mid)
+		ele21, ok2 := yarry.getEle(yarry.mid)
+
+		if !ok1 || !ok2 {
+			return -1
+		}
+
+		ele12, okx := xarry.getEle(xarry.mid + 1)
+		ele22, oky := yarry.getEle(yarry.mid + 1)
+		check1 := oky && (ele11 <= ele22)
+		check2 := okx && (ele21 <= ele12)
+
+		if LOG == 1 {
+			fmt.Printf("Numbers are: x(%v, %v), y(%v, %v)\n", ele11, ele12, ele21, ele22)
+		}
+		if (check1 && check2) || (!okx && check1) || (!oky && check2) {
+			if isodd {
+				return math.Max(float64(ele11), float64(ele21))
+			} else {
+
+				return float64(math.Max(float64(ele11), float64(ele21))+
+					math.Min(float64(ele12), float64(ele22))) / 2
+			}
+		} else if !oky {
+			// move backward arr2
+			yarry.end = yarry.mid - 1
+			yarry.mid = (yarry.start + yarry.end) / 2
+			xarry.mid = partId - yarry.mid
+		} else if !okx {
+			// move backward arr1
+			xarry.start = xarry.mid + 1
+			xarry.mid = (xarry.start + xarry.end) / 2
+			yarry.mid = partId - xarry.mid
+		} else {
+			if !check1 {
+				// move foward arr2
+				yarry.start = yarry.mid + 1
+				yarry.mid = (yarry.start + yarry.end) / 2
+				xarry.mid = partId - yarry.mid
+			} else if !check2 {
+				// move forward arr1
+				xarry.start = xarry.mid + 1
+				xarry.mid = (xarry.start + xarry.end) / 2
+				yarry.mid = partId - xarry.mid
+			}
+		}
+	}
+	return -3
+}
+
+func Test1(t *testing.T) {
+
+	num1 := []int{1, 3}
+	num2 := []int{2}
+	expected := 2.0
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+
+func Test21(t *testing.T) {
+
+	num1 := []int{1, 3}
+	num2 := []int{2, 4}
+	expected := 2.5
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+func Test22(t *testing.T) {
+
+	num1 := []int{2, 4}
+	num2 := []int{1, 3}
+	expected := 2.5
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+
+func Test23(t *testing.T) {
+
+	num1 := []int{1, 2}
+	num2 := []int{3, 4}
+	expected := 2.5
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+func Test3(t *testing.T) {
+
+	num1 := []int{1, 3}
+	num2 := []int{2, 4, 5}
+	expected := 3.0
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+
+func Test4(t *testing.T) {
+
+	num1 := []int{10, 11, 12, 13, 14, 15, 16, 17}
+	num2 := []int{2}
+	expected := 13.0
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+func Test5(t *testing.T) {
+
+	num1 := []int{10, 11, 12, 13, 14, 15, 16, 17}
+	num2 := []int{2, 20}
+	expected := 13.5
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+
+func Test6(t *testing.T) {
+
+	num1 := []int{11, 12, 13, 14, 15, 16, 17}
+	num2 := []int{}
+	expected := 14.0
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}

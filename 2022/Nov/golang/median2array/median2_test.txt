@@ -1,0 +1,246 @@
+/*
+
+4. Median of Two Sorted Arrays
+Hard
+
+20937
+
+2367
+
+Add to List
+
+Share
+Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
+
+The overall run time complexity should be O(log (m+n)).
+
+
+
+Example 1:
+
+Input: nums1 = [1,3], nums2 = [2]
+Output: 2.00000
+Explanation: merged array = [1,2,3] and median is 2.
+Example 2:
+
+Input: nums1 = [1,2], nums2 = [3,4]
+Output: 2.50000
+Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+
+
+Constraints:
+
+nums1.length == m
+nums2.length == n
+0 <= m <= 1000
+0 <= n <= 1000
+1 <= m + n <= 2000
+-106 <= nums1[i], nums2[i] <= 106
+
+*/
+
+package median
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+type arrayInfo struct {
+	start int
+	end   int
+	mid   int
+	len   int
+}
+
+func printArrayInfo(a arrayInfo) {
+	fmt.Printf("Array(%v):[ %v, %v, %v]\n", a.len, a.start, a.mid, a.end)
+}
+
+func findMedian(nums []int, startidx int, endidx int) float64 {
+
+	len := endidx - startidx + 1
+	mid := (startidx + endidx) / 2
+	isodd := (len % 2) != 0
+	fmt.Printf("Single Array(%v):[ %v, %v, %v]\n", len, startidx, mid, endidx)
+
+	if len == 0 {
+		return -1
+	} else if len == 1 {
+		return float64(nums[startidx])
+	}
+
+	if isodd {
+		return float64(nums[mid])
+	} else {
+		return float64(nums[mid]+nums[mid+1]) / 2
+	}
+}
+
+func canMoveforward(i1 arrayInfo, i2 arrayInfo) (int, int, bool) {
+	if i1.start < 0 || i1.end >= i1.len {
+		return 0, 0, false
+	}
+	if i1.end == i1.mid {
+		return 0, 0, false
+	}
+
+	newmid1 := (i1.mid + 1 + i1.end) / 2
+	total_mid := (i1.len + i2.len - 1) / 2
+	newmid2 := total_mid - newmid1
+	fmt.Printf("Can move forward: %v, %v\n", newmid1, newmid2)
+
+	if isvalidIdx(i1.len, newmid1) && isvalidIdx(i2.len, newmid2) {
+		return newmid1, newmid2, true
+	}
+	return 0, 0, false
+}
+
+func canMoveBackward(i1 arrayInfo, i2 arrayInfo) (int, int, bool) {
+	if i1.start < 0 || i1.end >= i1.len {
+		return 0, 0, false
+	}
+	if i1.start == i1.mid {
+		return 0, 0, false
+	}
+
+	newmid1 := (i1.start + i1.mid - 1) / 2
+	total_mid := (i1.len + i2.len - 1) / 2
+	newmid2 := total_mid - newmid1
+	fmt.Printf("Can move backward: %v, %v\n", newmid1, newmid2)
+
+	if isvalidIdx(i1.len, newmid1) && isvalidIdx(i2.len, newmid2) {
+		return newmid1, newmid2, true
+	}
+	return 0, 0, false
+}
+
+func isvalidIdx(len int, idx int) bool {
+	if idx < 0 {
+		return false
+	}
+	if idx >= len {
+		return false
+	}
+	return true
+}
+func outOfBoundaryForward(arr arrayInfo) int {
+	fmt.Printf("Out of boundary forward: ")
+	printArrayInfo(arr)
+	if arr.mid == arr.len-1 {
+		return 1
+	}
+	return 0
+}
+func outOfBoundaryBackward(arr arrayInfo) int {
+	fmt.Printf("Out of boundary backward: ")
+	printArrayInfo(arr)
+	if arr.mid == 0 {
+		return -1
+	}
+	return 0
+}
+
+func resetMid(info *arrayInfo, mid int) {
+	info.start = 0
+	info.end = info.len - 1
+	info.mid = mid
+}
+
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+
+	len1 := len(nums1)
+	len2 := len(nums2)
+
+	total := len1 + len2
+	//total_mid := ((total - 1) / 2)
+	isodd := (total % 2) != 0
+
+	info1 := arrayInfo{0, len1 - 1, int((len1 - 1) / 2), len1}
+	info2 := arrayInfo{0, len2 - 1, int((len2 - 1) / 2), len2}
+
+	if info1.len == 0 {
+		return findMedian(nums2, 0, len2-1)
+	} else if info2.len == 0 {
+		return findMedian(nums1, 0, len1-1)
+	}
+
+	printArrayInfo(info1)
+	printArrayInfo(info2)
+	cnt := 1
+	for true {
+		fmt.Printf("Looping %v ...\n", cnt)
+		cnt++
+
+		if cnt > 15 {
+			return -1
+		}
+		if nums1[info1.mid] < nums2[info2.mid] {
+			if mid1, mid2, ok := canMoveforward(info1, info2); ok {
+				info1.start = info1.mid + 1
+				info1.mid = mid1
+				resetMid(&info2, mid2)
+			} else {
+				switch outOfBoundaryForward(info1) {
+				case 0:
+					return findMedian(nums1, info2.len, info1.len-1)
+				case 1:
+					return findMedian(nums2, 0, info2.len-info1.len-1)
+				}
+			}
+		} else if nums1[info1.mid] > nums2[info2.mid] {
+			if mid1, mid2, ok := canMoveBackward(info1, info2); ok {
+				info1.end = info1.mid - 1
+				info1.mid = mid1
+				resetMid(&info2, mid2)
+			} else {
+				switch outOfBoundaryBackward(info1) {
+				case 0:
+					return findMedian(nums1, info2.len, info1.len-1)
+				case -1:
+					return findMedian(nums2, info1.len, info2.len-1)
+				}
+			}
+		} else if nums1[info1.mid] == nums2[info2.mid] {
+			fmt.Printf("Equal\n")
+			return float64(nums1[info1.mid])
+		} else {
+			if isodd {
+				return float64(nums1[info1.mid])
+			} else {
+				return float64(nums1[info1.mid]+nums2[info2.mid]) / 2
+			}
+		}
+		printArrayInfo(info1)
+		printArrayInfo(info2)
+	}
+	return 0
+}
+
+func Test1(t *testing.T) {
+
+	num1 := []int{1, 3}
+	num2 := []int{2}
+	expected := 2.0
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+
+func Test2(t *testing.T) {
+
+	num1 := []int{1, 3}
+	num2 := []int{2, 4}
+	expected := 2.5
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
+func Test3(t *testing.T) {
+
+	num1 := []int{1, 3}
+	num2 := []int{2, 4, 5}
+	expected := 3.0
+	result := findMedianSortedArrays(num1, num2)
+	assert.Equal(t, expected, result, "simple test failed")
+}
