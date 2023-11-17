@@ -1,0 +1,55 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type SampleSt struct {
+	Id     int    `json:"id" mandatory:"true"`
+	Author string `json:"author" mandatory:"true"`
+}
+
+// marshal for SampleSt
+
+func (s *SampleSt) MarshalJSON() ([]byte, error) {
+	return json.Marshal(SampleSt{Id: s.Id, Author: s.Author})
+}
+
+func (s *SampleSt) UnmarshalJSON(b []byte) error {
+
+	type TmpJson SampleSt
+	var tmpJson TmpJson
+
+	err := json.Unmarshal(b, &tmpJson)
+	if err != nil {
+		return err
+	}
+
+	*s = SampleSt(tmpJson)
+
+	return nil
+}
+
+func main() {
+	/*jsonData := []byte(`
+	{
+	    "id": 2,
+	    "author": "XYZ"
+	}`)*/
+
+	s1 := SampleSt{1, "ABC"}
+
+	fmt.Println(s1)
+	data, _ := s1.MarshalJSON()
+	fmt.Println(string(data))
+
+	var input = SampleSt{}
+	err := json.Unmarshal(data, &input)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	// Prints "main.SampleSt{Id:1, Author:"XYZ", Draft:false}"
+	fmt.Printf("%#v\n", input)
+}

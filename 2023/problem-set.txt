@@ -1,0 +1,103 @@
+Here are Top 50 of them:
+
+1. Furthest Building You Can Reach: https://lnkd.in/gup4SjT3
+
+2. Maximum Points You Can Obtain from Cards: https://lnkd.in/g46uuRRY
+
+3. Trim a Binary Search Tree: https://lnkd.in/ggZjxhfB
+
+4. Car Pooling: https://lnkd.in/gHYDuBB3
+
+5. Two Sum: https://lnkd.in/gvmrSsPf
+
+6. Container With Most Water: https://lnkd.in/g3wzbAdt
+
+7. Distribute Coins in Binary Tree: https://lnkd.in/gB5jwdYP
+
+8. Merge Two Sorted Lists: https://lnkd.in/gWiNc4iT
+
+9. Merge k Sorted Lists: https://lnkd.in/gC7XdcYn
+
+10. Group Anagrams: https://lnkd.in/g2ZvQCMt
+
+11. Merge Intervals: https://lnkd.in/gj7mKaC7
+
+12. Rotting Oranges: https://lnkd.in/gQPtGtBE
+
+13. Diameter of Binary Tree: https://lnkd.in/gpgf_bxQ
+
+14. Top K Frequent Elements: https://lnkd.in/gQ7YbpyG
+
+15. Sliding Window Maximum: https://lnkd.in/gPxyzZte
+
+16. Number of Islands: https://lnkd.in/g4SuhAKZ
+
+17. Linked List Cycle II: https://lnkd.in/gvgpiPeb
+
+18. Jump Game II: https://lnkd.in/gi2e6HwH
+
+19. Maximum Subarray: https://lnkd.in/gvXACXww
+
+20. Longest Increasing Path in a Matrix: https://lnkd.in/g832N7kP
+
+21. Trapping Rain Water: https://lnkd.in/gyj3KRzF
+
+22. Reverse Linked List: https://lnkd.in/gFdtXjpp
+
+23. Course Schedule II: https://lnkd.in/g-zYyETQ
+
+24. Sort Colors: https://lnkd.in/gkdR3wW8
+
+25. Implement Trie (Prefix Tree): https://lnkd.in/gAH5a-7M
+
+26. Move Zeroes: https://lnkd.in/g-zKby4V
+
+27. Daily Temperatures: https://lnkd.in/gEDjGxz8
+
+28. Insert Delete GetRandom O(1): https://lnkd.in/gCNhaage
+
+29. Longest Increasing Subsequence: https://lnkd.in/gQa8vA23
+
+30. Populate Next Right Pointers In Each Node II: https://lnkd.in/g_NM2kcb
+
+31. Binary Tree Maximum Path Sum: https://lnkd.in/gsQNe33B
+
+32. Longest Substring Without Repeating Characters: https://lnkd.in/gGUhV_Cm
+
+33. Combination Sum: https://lnkd.in/gE3rVnJi
+
+34. Unique Binary Search Trees II: https://lnkd.in/g8n6wZvP
+
+35. First Bad Version: https://lnkd.in/gm4NqwNY
+
+36. Word Search II: https://lnkd.in/geXH9tc3
+
+37. Task Scheduler: https://lnkd.in/g2JF77Fs
+
+38. Bus Routes: https://lnkd.in/gdXVMMVp
+
+39. Reconstruct Itinerary: https://lnkd.in/ga2KSv4h
+
+40. Maximum Profit in Job Scheduling: https://lnkd.in/gb_qP8vA
+
+41. Cheapest Flights Within K Stops: https://lnkd.in/grHsBbR6
+
+42. Stock Price Fluctuation: https://lnkd.in/g4yuZgQF
+
+43. Subarray Sum Equals K: https://lnkd.in/gbxm_NXC
+
+44. Delete Nodes And Return Forest: https://lnkd.in/g6Xx3uc7
+
+45. Coin Change II: https://lnkd.in/gYhka_-y
+
+46. Clone Graph: https://lnkd.in/gMqAMeSv
+
+47. Rotate Image: https://lnkd.in/gBny5AMK
+
+48. Convert Sorted Array to Binary Search Tree: https://lnkd.in/gT7tm5fJ
+
+49. Process Tasks Using Servers: https://lnkd.in/gMYbjGWB
+
+50. Min Stack: https://lnkd.in/gPCwDHiT
+
+Hope you find them useful :)
