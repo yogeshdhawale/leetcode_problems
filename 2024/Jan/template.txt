@@ -1,0 +1,111 @@
+
+#include <iostream>
+#include <cassert>
+#include <chrono>
+#include <string_view>
+#include <algorithm>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+#define __DEBUG_LOG 1
+
+#define LOGDATE __TIMESTAMP__
+
+#define FUNCDECL __FUNCTION__
+
+#define __DEBUG_LOG_NO 0
+#define __DEBUG_LOG_NR 1
+#define __DEBUG_LOG_VB 2
+
+#define LOG_MSG(msg) \
+    clog << "[" << LOGDATE << "] [" << FUNCDECL << "]\t" << msg << endl
+
+#ifdef __DEBUG_LOG
+#define LOG(x)                         \
+    if (__DEBUG_LOG != __DEBUG_LOG_NO) \
+    LOG_MSG(x)
+#define LOGV(x)                        \
+    if (__DEBUG_LOG == __DEBUG_LOG_VB) \
+    LOG_MSG(x)
+#else
+#define LOG(x)
+#define LOGV(x)
+#endif
+
+template <typename T>
+ostream &operator<<(ostream &out, const vector<T> &nums)
+{
+    size_t size = nums.size();
+    if (nums.size() > 20)
+        size = 20;
+    for (size_t i = 0; i < size; i++)
+    {
+        out << nums[i] << ", ";
+    }
+    if (nums.size() > 20)
+    {
+        out << "...";
+    }
+    return out;
+}
+
+class Solution
+{
+public:
+    long long minimumReplacement(vector<int> &nums)
+    {
+        long long result = 0;
+
+        LOG("original size is " + to_string(nums.size()));
+        LOGV(nums);
+
+        return result;
+    }
+};
+
+void test1(int testID)
+{
+    cout << "test" << testID << endl;
+    auto nums = vector<vector<int>>({
+        {3, 9, 3},
+        {1, 2, 3, 4, 5},
+    });
+
+    auto expected = vector<int>({2, 0});
+
+    for (size_t i = 0; i < nums.size(); i++)
+    {
+        cout << "test for: loop: " << nums[i] << endl;
+        Solution s;
+        auto result = s.minimumReplacement(nums[i]);
+        cout << result << " vs " << expected[i] << endl;
+        assert(result == expected[i]);
+    }
+}
+
+void test2(int testID)
+{
+
+    cout << "test" << testID << endl;
+    auto nums = vector<int>({1, 2, 3, 4, 5});
+    auto expected = 0;
+    cout << "test for: " << nums << endl;
+
+    Solution s;
+    auto result = s.minimumReplacement(nums);
+    cout << result << " vs " << expected << endl;
+    assert(result == expected);
+}
+
+int main()
+{
+
+    cout << "--- " << endl;
+    test1(1);
+    // test2(2);
+    // test3(3);
+
+    return 0;
+}
