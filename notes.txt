@@ -1,0 +1,6 @@
+
+/mnt/d/1Portable\ SW/kcachegrind/kcachegrind.exe
+
+
+D:\1Portable SW\kcachegrind
+\\wsl.localhost\Ubuntu-22.04\home\yo\leetcode\

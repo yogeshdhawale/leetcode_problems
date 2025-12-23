@@ -38,11 +38,10 @@ ostream& operator<<(ostream& out, string s) {
 template <typename T, typename U>
 ostream& operator<<(ostream& out, const pair<T, U>& nums)
 {
-    if (std::is_same<U, bool>::value) {
-        out << "{" << nums.first << ":}";
-        return out;
-    }
-    out << "{" << nums.first << ":" << nums.second << "}";
+    out << "{" << nums.first << ":";
+    if (!std::is_same<U, bool>::value)
+        out << nums.second;
+    out << "}";
     return out;
 }
 
@@ -54,8 +53,8 @@ ostream& operator<<(ostream& out, const vector<T>& nums)
         out << "\"V_" << size << "\"";
         size = __DBG_PRNT_ITEMS;
     }
-    else out << "[";
 
+    out << "[";
     for (size_t i = 0; i < size; i++) out << nums[i] << ",";
 
     if (nums.size() > __DBG_PRNT_ITEMS) out << "\"....\"";
